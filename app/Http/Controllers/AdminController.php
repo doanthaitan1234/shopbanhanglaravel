@@ -15,7 +15,17 @@ class AdminController extends Controller
     public function index(){
         return view('admin_login');
     }
-     public function show_dashboard(){
+
+    public function AuthLogin(){
+        $admin_id =Session::get('admin_id');
+        if($admin_id){
+            return Redirect::to('admin.dashboard');
+        }else{
+            return Redirect::to('admin_login')->send();
+        }
+    }
+    public function show_dashboard(){
+        $this->AuthLogin();
         return view('admin.dashboard');
     }
     public function dashboard(Request $request){
@@ -32,10 +42,13 @@ class AdminController extends Controller
        }
     }
     public function logout(){
+         $this->AuthLogin();
         Session::put('admin_name', NULL);
         Session::put('admin_id', NULL);
         return Redirect::to('/admin');
     }
+
+   
 
 
 
